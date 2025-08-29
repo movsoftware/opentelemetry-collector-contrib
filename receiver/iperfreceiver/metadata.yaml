@@ -1,0 +1,121 @@
+type: iperf
+
+status:
+  class: receiver
+  stability:
+    alpha: [metrics]
+  distributions: [contrib]
+  warnings: []
+  codeowners:
+    active: []
+
+resource_attributes:
+  iperf.target.host:
+    description: The hostname or IP address of the iperf3 server
+    type: string
+    enabled: true
+  iperf.target.port:
+    description: The port number of the iperf3 server
+    type: int
+    enabled: true
+
+attributes:
+  iperf.test.protocol:
+    description: The protocol used for the test (tcp, udp, sctp)
+    type: string
+  iperf.test.direction:
+    description: The direction of the test (send, receive)
+    type: string
+  iperf.test.streams:
+    description: Number of parallel streams
+    type: int
+  error.message:
+    description: Error message if test failed
+    type: string
+
+metrics:
+  iperf.bandwidth:
+    description: Network bandwidth measured during the test
+    enabled: true
+    unit: "bit/s"
+    gauge:
+      value_type: double
+    attributes: [iperf.test.protocol, iperf.test.direction, iperf.test.streams]
+  
+  iperf.transfer:
+    description: Total bytes transferred during the test
+    enabled: true
+    unit: "By"
+    sum:
+      value_type: int
+      aggregation_temporality: cumulative
+      monotonic: true
+    attributes: [iperf.test.protocol, iperf.test.direction]
+  
+  iperf.retransmits:
+    description: Number of TCP retransmissions (TCP only)
+    enabled: true
+    unit: "{retransmission}"
+    sum:
+      value_type: int
+      aggregation_temporality: cumulative
+      monotonic: true
+    attributes: [iperf.test.protocol]
+  
+  iperf.jitter:
+    description: Jitter measured during the test (UDP only)
+    enabled: true
+    unit: "ms"
+    gauge:
+      value_type: double
+    attributes: [iperf.test.protocol, iperf.test.direction]
+  
+  iperf.packet_loss:
+    description: Percentage of packets lost (UDP only)
+    enabled: true
+    unit: "%"
+    gauge:
+      value_type: double
+    attributes: [iperf.test.protocol, iperf.test.direction]
+  
+  iperf.rtt:
+    description: Round trip time
+    enabled: false
+    unit: "ms"
+    gauge:
+      value_type: double
+    attributes: [iperf.test.protocol]
+  
+  iperf.cwnd:
+    description: TCP congestion window size
+    enabled: false
+    unit: "By"
+    gauge:
+      value_type: int
+    attributes: [iperf.test.protocol]
+  
+  iperf.test.duration:
+    description: Duration of the iperf test
+    enabled: true
+    unit: "s"
+    gauge:
+      value_type: double
+    attributes: [iperf.test.protocol]
+  
+  iperf.test.error:
+    description: Records errors occurring during iperf test
+    enabled: true
+    unit: "{error}"
+    sum:
+      value_type: int
+      aggregation_temporality: cumulative
+      monotonic: false
+    attributes: [error.message]
+  
+  iperf.cpu.utilization:
+    description: CPU utilization during the test
+    enabled: false
+    unit: "%"
+    gauge:
+      value_type: double
+    attributes: [iperf.test.protocol, iperf.test.direction]

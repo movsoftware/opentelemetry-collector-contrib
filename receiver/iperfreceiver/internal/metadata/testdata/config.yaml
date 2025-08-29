@@ -1,0 +1,75 @@
+default:
+all_set:
+  metrics:
+    iperf.bandwidth:
+      enabled: true
+    iperf.cpu.utilization:
+      enabled: true
+    iperf.cwnd:
+      enabled: true
+    iperf.jitter:
+      enabled: true
+    iperf.packet_loss:
+      enabled: true
+    iperf.retransmits:
+      enabled: true
+    iperf.rtt:
+      enabled: true
+    iperf.test.duration:
+      enabled: true
+    iperf.test.error:
+      enabled: true
+    iperf.transfer:
+      enabled: true
+  resource_attributes:
+    iperf.target.host:
+      enabled: true
+    iperf.target.port:
+      enabled: true
+none_set:
+  metrics:
+    iperf.bandwidth:
+      enabled: false
+    iperf.cpu.utilization:
+      enabled: false
+    iperf.cwnd:
+      enabled: false
+    iperf.jitter:
+      enabled: false
+    iperf.packet_loss:
+      enabled: false
+    iperf.retransmits:
+      enabled: false
+    iperf.rtt:
+      enabled: false
+    iperf.test.duration:
+      enabled: false
+    iperf.test.error:
+      enabled: false
+    iperf.transfer:
+      enabled: false
+  resource_attributes:
+    iperf.target.host:
+      enabled: false
+    iperf.target.port:
+      enabled: false
+filter_set_include:
+  resource_attributes:
+    iperf.target.host:
+      enabled: true
+      metrics_include:
+        - regexp: ".*"
+    iperf.target.port:
+      enabled: true
+      metrics_include:
+        - regexp: ".*"
+filter_set_exclude:
+  resource_attributes:
+    iperf.target.host:
+      enabled: true
+      metrics_exclude:
+        - strict: "iperf.target.host-val"
+    iperf.target.port:
+      enabled: true
+      metrics_exclude:
+        - regexp: ".*"
