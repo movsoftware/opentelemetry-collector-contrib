@@ -1,0 +1,97 @@
+type: ztrace
+
+status:
+  class: receiver
+  stability:
+    alpha: [traces, metrics]
+  distributions: [contrib]
+  codeowners:
+    active: [open-telemetry/collector-contrib-approvers]
+
+resource_attributes:
+  ztrace.target:
+    description: The target endpoint being traced
+    type: string
+    enabled: true
+  ztrace.protocol:
+    description: The protocol used for tracing (udp, icmp, tcp)
+    type: string
+    enabled: true
+  ztrace.port:
+    description: The target port for UDP/TCP protocols
+    type: int
+    enabled: true
+
+attributes:
+  ttl:
+    description: Time To Live value for the hop
+    type: int
+  ip:
+    description: IP address of the hop
+    type: string
+  hostname:
+    description: Hostname of the hop (if resolved)
+    type: string
+  city:
+    description: Geolocation city of the hop
+    type: string
+  country:
+    description: Geolocation country of the hop
+    type: string
+  asn:
+    description: Autonomous System Number of the hop
+    type: string
+  provider:
+    description: Network provider of the hop
+    type: string
+
+metrics:
+  ztrace.hop.latency:
+    description: Latency for each hop in the trace
+    unit: ms
+    gauge:
+      value_type: double
+    enabled: true
+    attributes: [ttl, ip, hostname, city, country, asn, provider]
+  ztrace.hop.packet_loss:
+    description: Packet loss percentage for each hop
+    unit: "%"
+    gauge:
+      value_type: double
+    enabled: true
+    attributes: [ttl, ip]
+  ztrace.hop.jitter:
+    description: Jitter for each hop in the trace
+    unit: ms
+    gauge:
+      value_type: double
+    enabled: true
+    attributes: [ttl, ip]
+  ztrace.total_latency:
+    description: Total latency to reach the target
+    unit: ms
+    gauge:
+      value_type: double
+    enabled: true
+    attributes: []
+  ztrace.hop_count:
+    description: Number of hops to reach the target
+    unit: "1"
+    gauge:
+      value_type: int
+    enabled: true
+    attributes: []
+
+tests:
+  config:
+    targets:
+      - endpoint: example.com
+        port: 80
+    collection_interval: 30s
+    timeout: 10s
+    protocol: udp
+    max_hops: 30
+    packet_size: 56
+    retries: 3
+    enable_geolocation: true
+    enable_asn_lookup: true
